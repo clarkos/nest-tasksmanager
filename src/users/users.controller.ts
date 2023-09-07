@@ -10,28 +10,35 @@ import {
 import { UsersService } from './users.service';
 import { UserDTO, UserToProjDTO, UserUpdateDTO } from './dto/user.dto';
 import { UsersEntity } from './entities/users.entity';
+import { ProjectsEntity } from '@/projects/entities/project.entity';
 
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Post('register')
-  async createUser(@Body() body: UserDTO): Promise<UsersEntity> {
+  async createUser(@Body() body: UserDTO) {
     return await this.userService.createUser(body);
   }
 
-  @Post('add-to-project')
-  async assignUserToProject(@Body() body: UserToProjDTO) {
-    return await this.userService.assignUserToProject(body);
+  @Post('add-to-project/:projectId')
+  async assignUserToProject(
+    @Body() body: UserToProjDTO,
+    @Param('projectId') id: string,
+  ) {
+    return await this.userService.assignUserToProject({
+      ...body,
+      project: id as unknown as ProjectsEntity,
+    });
   }
 
   @Get()
-  async getAllUsers(): Promise<UsersEntity[]> {
+  async getAllUsers() {
     return await this.userService.findUsers();
   }
 
   @Get(':id')
-  async getUserById(@Param('id') id: string): Promise<UsersEntity> {
+  async getUserById(@Param('id') id: string) {
     return await this.userService.findUserById(id);
   }
 

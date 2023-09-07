@@ -1,28 +1,29 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
-import { UsersEntity } from 'src/users/entities/users.entity';
-import { PayloadToken } from 'src/interface/auth.interface';
+import { UsersService } from '@/users/users.service';
+import { UsersEntity } from '@/users/entities/users.entity';
+import { PayloadToken } from '@/interface/auth.interface';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly userService: UsersService) {}
 
-  async validateUser(user: string, pass: string) {
+  async validateUser(user: string, pass: string): Promise<UsersEntity | null> {
     const selectType = /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/gi;
-    let field = {
+    let fieldType = {
       key: undefined,
       value: user,
     };
     if (user.match(selectType)) {
-      field.key = 'email';
+      fieldType.key = 'email';
     } else {
-      field.key = 'user';
+      fieldType.key = 'user';
     }
-    const validatedUser = await this.userService.findBy(field);
+    const validatedUser = await this.userService.findBy(fieldType);
     const match = await bcrypt.compare(pass, validatedUser.pass);
     if (match) return validatedUser;
+
     return null;
   }
 

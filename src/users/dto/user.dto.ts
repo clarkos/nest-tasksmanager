@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { ACCESS_LEVEL, ROLES } from '@/constants/roles';
 import { UsersEntity } from '../entities/users.entity';
-import { ProjectsEntity } from '@/projects/entities/projects.entity';
+import { ProjectsEntity } from '@/projects/entities/project.entity';
 
 export class UserDTO {
   @IsNotEmpty()

@@ -1,10 +1,10 @@
 import * as bcrypt from 'bcrypt';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, DeleteResult, UpdateResult } from 'typeorm';
-import { UsersEntity } from './entities/users.entity';
-import { UserDTO, UserToProjDTO, UserUpdateDTO } from './dto/user.dto';
 import { ErrorManager } from 'src/utils/error.mgmt';
+import { Repository, DeleteResult, UpdateResult } from 'typeorm';
+import { UserDTO, UserToProjDTO, UserUpdateDTO } from './dto/user.dto';
+import { UsersEntity } from './entities/users.entity';
 import { UsersProjectsEntity } from './entities/usersProjects.entity';
 
 @Injectable()
@@ -14,16 +14,16 @@ export class UsersService {
     private readonly userRepository: Repository<UsersEntity>,
     @InjectRepository(UsersProjectsEntity)
     private readonly userProjectRepository: Repository<UsersProjectsEntity>,
-  ) {
-    // process.env.
-  }
+  ) {}
 
   async createUser(body: UserDTO): Promise<UsersEntity> {
     try {
       body.pass = await bcrypt.hash(body.pass, +process.env.HASH_SALT);
       return await this.userRepository.save(body);
     } catch (error) {
-      throw new Error(error);
+      throw ErrorManager.createSignatureError(
+        `USER_POST - Error creating user \n${error.message}`,
+      );
     }
   }
 
@@ -32,13 +32,13 @@ export class UsersService {
       const users: UsersEntity[] = await this.userRepository.find();
       if (users.length === 0)
         throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'There is no results',
+          type: 'NOT_FOUND',
+          message: 'There is no users registered',
         });
       return users;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `No se encuentran resultados \n${error.message}`,
+        `USERS_GET - Error when looking for users on database \n${error.message}`,
       );
     }
   }
@@ -53,45 +53,49 @@ export class UsersService {
         .getOne();
       if (!user)
         throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'There is no results',
+          type: 'NOT_FOUND',
+          message: `There is no users with ID ${id}`,
         });
       return user;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `No se encuentran resultados por ID \n${error.message}`,
+        `USERS_GET - Error when looking for user with ID ${id} \n${error.message}`,
       );
     }
   }
 
-  async updateUser(body: UserUpdateDTO, id: string): Promise<UpdateResult> {
+  async updateUser(
+    body: UserUpdateDTO,
+    id: string,
+  ): Promise<UpdateResult | undefined> {
     try {
       const user: UpdateResult = await this.userRepository.update(id, body);
-      if (user.affected === 0)
+      if (user.affected === 0) {
         throw new ErrorManager({
-          type: 'NOT_FOUND',
-          message: 'There is no results to update',
+          type: 'BAD_REQUEST',
+          message: `${user.affected} updated`,
         });
+      }
       return user;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `No se ha podido actualizar el usuario \n${error.message}`,
+        `USERS_PATCH - Error when updating user \n${error.message}`,
       );
     }
   }
 
-  async deleteUser(id: string): Promise<DeleteResult> {
+  async deleteUser(id: string): Promise<DeleteResult | undefined> {
     try {
       const user: DeleteResult = await this.userRepository.delete(id);
       if (user.affected === 0)
         throw new ErrorManager({
-          type: 'NOT_FOUND',
-          message: 'There is no results to delete',
+          type: 'BAD_REQUEST',
+          message: `${user.affected} deleted`,
         });
       return user;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `No se puede borrar el usuario \n${error.message}`,
+        `USERS_DELETE - Error when deleting user \n${error.message}`,
       );
     }
   }
@@ -101,7 +105,7 @@ export class UsersService {
       return await this.userProjectRepository.save(body);
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `No se ha podido asignar el usuario al proyecto \n${error.message}`,
+        `Cannot assign user to project \n${error.message}`,
       );
     }
   }
@@ -115,13 +119,13 @@ export class UsersService {
         .getOne();
       if (!user)
         throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: 'There is no results',
+          type: 'NOT_FOUND',
+          message: `There is no users found with "${key}: ${value}"`,
         });
       return user;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `No se ha podido encontrar por email o ID \n${error.message}`,
+        `USERS_GET - Error looking for users with "${key}: ${value}" \n${error.message}`,
       );
     }
   }
