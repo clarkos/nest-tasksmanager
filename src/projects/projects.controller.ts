@@ -15,7 +15,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
-  @Post('new')
+  @Post(':userId/new')
   async createProject(
     @Body() body: CreateProjectDto,
     @Param('userId') userId: string,

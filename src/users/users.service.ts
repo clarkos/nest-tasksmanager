@@ -22,7 +22,7 @@ export class UsersService {
       return await this.userRepository.save(body);
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `USER_POST - Error creating user \n${error.message}`,
+        `USER_POST - Error creating user  ${error.message}`,
       );
     }
   }
@@ -38,7 +38,7 @@ export class UsersService {
       return users;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `USERS_GET - Error when looking for users on database \n${error.message}`,
+        `USERS_GET - Error when looking for users on database  ${error.message}`,
       );
     }
   }
@@ -59,53 +59,7 @@ export class UsersService {
       return user;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `USERS_GET - Error when looking for user with ID ${id} \n${error.message}`,
-      );
-    }
-  }
-
-  async updateUser(
-    body: UserUpdateDTO,
-    id: string,
-  ): Promise<UpdateResult | undefined> {
-    try {
-      const user: UpdateResult = await this.userRepository.update(id, body);
-      if (user.affected === 0) {
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: `${user.affected} updated`,
-        });
-      }
-      return user;
-    } catch (error) {
-      throw ErrorManager.createSignatureError(
-        `USERS_PATCH - Error when updating user \n${error.message}`,
-      );
-    }
-  }
-
-  async deleteUser(id: string): Promise<DeleteResult | undefined> {
-    try {
-      const user: DeleteResult = await this.userRepository.delete(id);
-      if (user.affected === 0)
-        throw new ErrorManager({
-          type: 'BAD_REQUEST',
-          message: `${user.affected} deleted`,
-        });
-      return user;
-    } catch (error) {
-      throw ErrorManager.createSignatureError(
-        `USERS_DELETE - Error when deleting user \n${error.message}`,
-      );
-    }
-  }
-
-  async assignUserToProject(body: UserToProjDTO) {
-    try {
-      return await this.userProjectRepository.save(body);
-    } catch (error) {
-      throw ErrorManager.createSignatureError(
-        `Cannot assign user to project \n${error.message}`,
+        `USERS_GET - Error when looking for user with ID ${id}  ${error.message}`,
       );
     }
   }
@@ -125,7 +79,53 @@ export class UsersService {
       return user;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `USERS_GET - Error looking for users with "${key}: ${value}" \n${error.message}`,
+        `USERS_GET - Error looking for users with "${key}: ${value}"   ${error.message}`,
+      );
+    }
+  }
+
+  async updateUser(
+    body: UserUpdateDTO,
+    id: string,
+  ): Promise<UpdateResult | undefined> {
+    try {
+      const user: UpdateResult = await this.userRepository.update(id, body);
+      if (user.affected === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: `${user.affected} updated`,
+        });
+      }
+      return user;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(
+        `USERS_PATCH - Error when updating user  ${error.message}`,
+      );
+    }
+  }
+
+  async assignUserToProject(body: UserToProjDTO) {
+    try {
+      return await this.userProjectRepository.save(body);
+    } catch (error) {
+      throw ErrorManager.createSignatureError(
+        `Cannot assign user to project  ${error.message}`,
+      );
+    }
+  }
+
+  async deleteUser(id: string): Promise<DeleteResult | undefined> {
+    try {
+      const user: DeleteResult = await this.userRepository.delete(id);
+      if (user.affected === 0)
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: `${user.affected} deleted`,
+        });
+      return user;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(
+        `USERS_DELETE - Error when deleting user  ${error.message}`,
       );
     }
   }

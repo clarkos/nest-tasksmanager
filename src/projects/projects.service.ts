@@ -30,7 +30,7 @@ export class ProjectsService {
       });
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `PROJECT_POST - Error creating project \n${error.message}`,
+        `PROJECT_POST - Error creating project  ${error.message}`,
       );
     }
   }
@@ -47,7 +47,7 @@ export class ProjectsService {
       return projects;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `PROJECT_GET - Error when looking for projects \n${error.message}`,
+        `PROJECT_GET - Error when looking for projects  ${error.message}`,
       );
     }
   }
@@ -70,7 +70,7 @@ export class ProjectsService {
       return project;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `PROJECT_GET - Error when looking for project id ${id} \n${error.message}`,
+        `PROJECT_GET - Error when looking for project id ${id}  ${error.message}`,
       );
     }
   }
@@ -93,7 +93,7 @@ export class ProjectsService {
       return project;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `PROJECT_PUT - Error when updating project ${id} \n${error.message}`,
+        `PROJECT_PUT - Error when updating project ${id}  ${error.message}`,
       );
     }
   }
@@ -110,7 +110,7 @@ export class ProjectsService {
       return project;
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `PROJECT_DELETE - Error when deleting project ${id} \n${error.message}`,
+        `PROJECT_DELETE - Error when deleting project ${id}  ${error.message}`,
       );
     }
   }

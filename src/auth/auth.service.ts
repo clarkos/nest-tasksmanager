@@ -15,11 +15,7 @@ export class AuthService {
       key: undefined,
       value: user,
     };
-    if (user.match(selectType)) {
-      fieldType.key = 'email';
-    } else {
-      fieldType.key = 'user';
-    }
+    fieldType.key = user.match(selectType) ? 'email' : 'user';
     const validatedUser = await this.userService.findBy(fieldType);
     const match = await bcrypt.compare(pass, validatedUser.pass);
     if (match) return validatedUser;

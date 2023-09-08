@@ -29,7 +29,7 @@ export class TasksService {
       });
     } catch (error) {
       throw ErrorManager.createSignatureError(
-        `TASKS_POST - Error creating task \n${error.message}`,
+        `TASKS_POST - Error creating task  ${error.message}`,
       );
     }
   }
