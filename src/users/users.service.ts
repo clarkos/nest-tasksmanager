@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ErrorManager } from 'src/utils/error.mgmt';
+import { ErrorManager } from '@/utils/error.mgmt';
 import { Repository, DeleteResult, UpdateResult } from 'typeorm';
 import { UserDTO, UserToProjDTO, UserUpdateDTO } from './dto/user.dto';
 import { UsersEntity } from './entities/users.entity';

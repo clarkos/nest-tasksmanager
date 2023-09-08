@@ -1,7 +1,7 @@
-import { BaseEntity } from '@/config/base.entity';
-import { STATUS_TASK } from '@/constants/statusTask';
-import { ProjectsEntity } from '@/projects/entities/project.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { STATUS_TASK } from '../../constants/statusTask';
+import { BaseEntity } from '../../config/base.entity';
+import { ProjectsEntity } from '../../projects/entities/project.entity';
 
 @Entity({ name: 'task' })
 export class TasksEntity extends BaseEntity {

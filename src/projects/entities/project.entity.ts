@@ -1,9 +1,10 @@
-import { BaseEntity } from '@/config/base.entity';
-import { IProject } from '@/interface/project.interface';
-import { UsersProjectsEntity } from '@/users/entities/usersProjects.entity';
-import { Column, OneToMany } from 'typeorm';
-import { TasksEntity } from '@/tasks/entities/task.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
+import { IProject } from '../../interface/project.interface';
+import { BaseEntity } from '../../config/base.entity';
+import { TasksEntity } from '../../tasks/entities/task.entity';
+import { UsersProjectsEntity } from '../../users/entities/usersProjects.entity';
 
+@Entity({ name: 'projects' })
 export class ProjectsEntity extends BaseEntity implements IProject {
   @Column()
   projName: string;
